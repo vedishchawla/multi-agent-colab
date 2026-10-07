@@ -6,9 +6,14 @@ It is completely general-purpose and supports arbitrary user goals.
 """
 
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
+
+
+def utc_now() -> datetime:
+    """Return timezone-aware current UTC datetime."""
+    return datetime.now(timezone.utc)
 
 
 class Constraint(BaseModel):
@@ -83,7 +88,7 @@ class Finding(BaseModel):
         default="active",
         description="Status in the active deliberation"
     )
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=utc_now)
     revised_at: Optional[datetime] = None
 
 
@@ -167,7 +172,7 @@ class HumanEscalation(BaseModel):
         description="The option or custom input provided by the human"
     )
     status: Literal["pending", "resolved"] = Field(default="pending")
-    escalated_at: datetime = Field(default_factory=datetime.utcnow)
+    escalated_at: datetime = Field(default_factory=utc_now)
     resolved_at: Optional[datetime] = None
 
 
@@ -213,7 +218,7 @@ class AgentStatus(BaseModel):
     active_task_id: Optional[str] = None
     color_theme: Optional[str] = None
     avatar_icon: Optional[str] = None
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=utc_now)
 
 
 class ExecutionEvent(BaseModel):
@@ -224,7 +229,7 @@ class ExecutionEvent(BaseModel):
     agent_name: Optional[str] = None
     title: str = Field(default="", description="Short event title for timeline")
     data: Dict[str, Any] = Field(default_factory=dict)
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=utc_now)
 
 
 class SpecialistProfile(BaseModel):

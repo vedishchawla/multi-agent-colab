@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     # Groq API Credentials (free at https://console.groq.com/keys)
     GROQ_API_KEY: str = Field(default="", description="Groq API Key")
-    GROQ_MODEL: str = Field(default="llama-3.3-70b-versatile", description="Groq model name")
+    GROQ_MODEL: str = Field(default="openai/gpt-oss-120b", description="Groq model name")
 
     # LLM Provider Selection: "groq", "gemini", or "auto" (auto picks first available)
     LLM_PROVIDER: str = Field(default="auto", description="Which LLM provider to use: groq, gemini, or auto")

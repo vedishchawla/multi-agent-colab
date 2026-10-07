@@ -1,12 +1,90 @@
 @import "tailwindcss";
 @import "@xyflow/react/dist/style.css";
 
+:root {
+  --canvas: #f5f1e8;
+  --paper: #fffdf8;
+  --paper-muted: #eee7da;
+  --ink: #25231f;
+  --ink-soft: #625d54;
+  --line: #ded6c8;
+  --accent: #b95432;
+  --accent-deep: #8f3e25;
+  --sage: #557564;
+  --danger: #a64840;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+}
+
 @layer base {
+  html {
+    background: var(--canvas);
+  }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
   }
   code, pre {
     font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .app-shell {
+    background: var(--canvas);
+    color: var(--ink);
+  }
+
+  .surface {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+  }
+
+  .eyebrow {
+    color: var(--accent-deep);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .focus-ring:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    outline-offset: 3px;
+  }
+
+  /* Transitional mapping for the pre-redesign panels. It keeps active run states
+     in the same light system while their content components retain their logic. */
+  .app-shell :is([class~="bg-slate-950"], [class~="bg-slate-950/60"], [class~="bg-slate-950/70"], [class~="bg-slate-950/80"], [class~="bg-slate-900"], [class~="bg-slate-900/80"], [class~="bg-slate-900/90"]) {
+    background-color: var(--paper) !important;
+  }
+
+  .app-shell :is([class~="border-slate-800"], [class~="border-slate-800/80"], [class~="border-slate-800/60"], [class~="border-slate-800/50"], [class~="border-slate-700"], [class~="border-slate-700/50"]) {
+    border-color: var(--line) !important;
+  }
+
+  .app-shell .text-slate-100,
+  .app-shell .text-slate-200,
+  .app-shell .text-slate-300 {
+    color: var(--ink) !important;
+  }
+
+  .app-shell .text-slate-400,
+  .app-shell .text-slate-500,
+  .app-shell .text-slate-600 {
+    color: var(--ink-soft) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

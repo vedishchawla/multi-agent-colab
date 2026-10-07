@@ -246,6 +246,20 @@ class MockLLMProvider(BaseLLMProvider):
                     domain="Operations & Execution",
                     required_expertise="Operational Execution Specialist",
                     tasks=[Task(task_id="TSK-OPS-01", workstream_id="WS-04", assigned_agent="OperationsRiskAgent", objective="Assess implementation timeline, friction, and staffing capabilities")]
+                ),
+                Workstream(
+                    workstream_id="WS-05",
+                    title="Technical Architecture & Systems Integration",
+                    domain="Technical Architecture",
+                    required_expertise="Technical Architecture Specialist",
+                    tasks=[Task(task_id="TSK-TECH-01", workstream_id="WS-05", assigned_agent="TechnicalArchitectureAgent", objective="Assess system design, integration complexity, and scalability constraints")]
+                ),
+                Workstream(
+                    workstream_id="WS-06",
+                    title="Data Protection & Security Review",
+                    domain="Security & Data Governance",
+                    required_expertise="Security & Privacy Specialist",
+                    tasks=[Task(task_id="TSK-SEC-01", workstream_id="WS-06", assigned_agent="SecurityComplianceAgent", objective="Assess security, privacy, data handling, and governance risks")]
                 )
             ],
             activated_specialists=[
@@ -253,6 +267,8 @@ class MockLLMProvider(BaseLLMProvider):
                 SpecialistProfile(agent_name="RegulatoryComplianceAgent", role_title="Governance & Compliance Specialist", domain="Governance & Risk", system_instruction="Audits compliance, regulatory bounds, and risk guardrails.", color_theme="#f97316", avatar_icon="ShieldCheck"),
                 SpecialistProfile(agent_name="FinancialModelingAgent", role_title="Financial Modeling Specialist", domain="Financial Economics", system_instruction="Models budgets, cash burn, and financial returns.", color_theme="#10b981", avatar_icon="DollarSign"),
                 SpecialistProfile(agent_name="OperationsRiskAgent", role_title="Operational Execution Specialist", domain="Operations & Execution", system_instruction="Audits operational readiness and timeline viability.", color_theme="#8b5cf6", avatar_icon="Clock")
+                ,SpecialistProfile(agent_name="TechnicalArchitectureAgent", role_title="Technical Architecture Specialist", domain="Technical Architecture", system_instruction="Evaluates system design, integration complexity, and scalability.", color_theme="#3b82f6", avatar_icon="Cpu")
+                ,SpecialistProfile(agent_name="SecurityComplianceAgent", role_title="Security & Privacy Specialist", domain="Security & Data Governance", system_instruction="Assesses security, privacy, data handling, and governance risk.", color_theme="#ef4444", avatar_icon="Lock")
             ],
             extracted_implicit_constraints=[
                 Constraint(constraint_id="CST-01", category="risk", description="Zero tolerance for critical operational or compliance failure", is_hard_constraint=True),

@@ -38,10 +38,10 @@ export const AgentGraphView: React.FC<AgentGraphViewProps> = ({
           data: { label: 'Awaiting Run Initialization...' },
           type: 'default',
           style: {
-            background: '#0f172a',
-            color: '#64748b',
-            border: '1px dashed #334155',
-            borderRadius: '12px',
+            background: '#fffdf8',
+            color: '#756e64',
+            border: '1px dashed #cfc4b4',
+            borderRadius: '8px',
             padding: '24px',
             fontSize: '14px',
           },
@@ -155,11 +155,10 @@ export const AgentGraphView: React.FC<AgentGraphViewProps> = ({
   }, [conflicts, findings]);
 
   return (
-    <div className="relative w-full h-[420px] rounded-2xl bg-slate-950/80 border border-slate-800/80 overflow-hidden shadow-2xl">
-      {/* Visual Badge overlay */}
-      <div className="absolute top-3 left-3 z-10 flex items-center gap-2 bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-800 text-xs font-medium text-slate-300">
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        Live Multi-Agent Coordination Mesh
+    <div className="surface relative h-[420px] w-full overflow-hidden bg-[#fbf7ef]">
+      <div className="absolute left-4 top-4 z-10 flex items-center gap-2 rounded-full border border-[#ded6c8] bg-[#fffdf8]/90 px-3 py-1.5 text-[11px] font-medium text-[#625d54] backdrop-blur">
+        <span className="h-1.5 w-1.5 rounded-full bg-[#557564] animate-pulse" />
+        Live decision map
       </div>
 
       <ReactFlow
@@ -172,8 +171,8 @@ export const AgentGraphView: React.FC<AgentGraphViewProps> = ({
         maxZoom={1.5}
         className="bg-dot-grid"
       >
-        <Background color="#1e293b" gap={20} size={1} />
-        <Controls className="!border-slate-800 !bg-slate-900/90 !rounded-lg overflow-hidden" />
+        <Background color="#e5ddcf" gap={24} size={1} />
+        <Controls className="!border-[#ded6c8] !bg-[#fffdf8]/90 !rounded-lg overflow-hidden" />
       </ReactFlow>
     </div>
   );

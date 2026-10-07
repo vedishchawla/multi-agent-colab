@@ -65,42 +65,42 @@ export const AgentNode: React.FC<AgentNodeProps> = ({ data }) => {
     switch (state) {
       case 'thinking':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 border border-blue-500/30 animate-pulse">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping" />
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-[#f2ddd5] text-[#8f3e25] border border-[#d99c88] animate-pulse">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#b95432]" />
             Analyzing
           </span>
         );
       case 'posting_finding':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-[#e7ede5] text-[#456553] border border-[#aec1b2]">
             <CheckCircle2 className="w-3 h-3" />
             Posting Finding
           </span>
         );
       case 'debating':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30 animate-pulse">
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-[#f5ead5] text-[#8a5c1e] border border-[#dfc087] animate-pulse">
             <AlertTriangle className="w-3 h-3" />
             Debating
           </span>
         );
       case 'waiting_human':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse">
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-[#f2dfdd] text-[#a64840] border border-[#d7a39d] animate-pulse">
             <AlertTriangle className="w-3 h-3" />
             Awaiting Human
           </span>
         );
       case 'resolved':
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-[#e7ede5] text-[#456553] border border-[#aec1b2]">
             <CheckCircle2 className="w-3 h-3" />
             Consensus Aligned
           </span>
         );
       default:
         return (
-          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-[#f1ece3] text-[#756e64] border border-[#ded6c8]">
             <Clock className="w-3 h-3" />
             Standby
           </span>
@@ -109,23 +109,23 @@ export const AgentNode: React.FC<AgentNodeProps> = ({ data }) => {
   };
 
   const getBorderGlow = () => {
-    if (isHighlighted) return 'ring-4 ring-cyan-400 border-cyan-400 shadow-xl shadow-cyan-500/30 scale-105';
-    if (inConflict) return 'ring-2 ring-rose-500 border-rose-500 shadow-lg shadow-rose-500/20';
-    if (state === 'thinking') return 'ring-2 ring-blue-500/70 border-blue-500 shadow-lg shadow-blue-500/20';
-    if (state === 'debating') return 'ring-2 ring-amber-500/70 border-amber-500 shadow-lg shadow-amber-500/20';
-    if (state === 'resolved') return 'border-emerald-500/50 shadow-sm shadow-emerald-500/10';
-    return 'border-slate-800 hover:border-slate-700';
+    if (isHighlighted) return 'ring-2 ring-[#d99c88] border-[#b95432]';
+    if (inConflict) return 'ring-2 ring-[#d7a39d] border-[#a64840]';
+    if (state === 'thinking') return 'ring-2 ring-[#d99c88] border-[#b95432]';
+    if (state === 'debating') return 'ring-2 ring-[#dfc087] border-[#a16a20]';
+    if (state === 'resolved') return 'border-[#aec1b2]';
+    return 'border-[#ded6c8] hover:border-[#bfb5a6]';
   };
 
   return (
     <div
-      className={`relative w-72 rounded-xl bg-slate-900/90 backdrop-blur-md p-4 transition-all duration-300 border ${getBorderGlow()}`}
+      className={`relative w-72 rounded-lg bg-[#fffdf8] p-4 transition-all duration-300 border ${getBorderGlow()}`}
     >
       {/* Top and Bottom Connection Handles */}
-      <Handle type="target" position={Position.Top} className="!bg-cyan-500 !w-3 !h-3 !border-slate-900" />
-      <Handle type="source" position={Position.Bottom} className="!bg-cyan-500 !w-3 !h-3 !border-slate-900" />
-      <Handle type="target" position={Position.Left} id="left" className="!bg-rose-500 !w-3 !h-3 !border-slate-900" />
-      <Handle type="source" position={Position.Right} id="right" className="!bg-rose-500 !w-3 !h-3 !border-slate-900" />
+      <Handle type="target" position={Position.Top} className="!bg-[#b95432] !w-2.5 !h-2.5 !border-[#fffdf8]" />
+      <Handle type="source" position={Position.Bottom} className="!bg-[#b95432] !w-2.5 !h-2.5 !border-[#fffdf8]" />
+      <Handle type="target" position={Position.Left} id="left" className="!bg-[#a64840] !w-2.5 !h-2.5 !border-[#fffdf8]" />
+      <Handle type="source" position={Position.Right} id="right" className="!bg-[#a64840] !w-2.5 !h-2.5 !border-[#fffdf8]" />
 
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-2.5">
@@ -141,25 +141,25 @@ export const AgentNode: React.FC<AgentNodeProps> = ({ data }) => {
             {getAgentIcon(agent.avatar_icon)}
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-slate-100 leading-tight line-clamp-1">
+            <h4 className="text-sm font-semibold text-[#25231f] leading-tight line-clamp-1">
               {agent.role_title}
             </h4>
-            <p className="text-[11px] text-slate-400 line-clamp-1">{agent.domain}</p>
+            <p className="text-[11px] text-[#756e64] line-clamp-1">{agent.domain}</p>
           </div>
         </div>
       </div>
 
       {/* Status & Findings Count */}
-      <div className="flex items-center justify-between gap-2 mb-2 pt-2 border-t border-slate-800/80">
+      <div className="flex items-center justify-between gap-2 mb-2 pt-2 border-t border-[#ded6c8]">
         <div>{getStatusBadge()}</div>
-        <div className="text-[11px] font-mono text-slate-400 bg-slate-800/60 px-2 py-0.5 rounded border border-slate-700/50">
+        <div className="text-[11px] font-mono text-[#756e64] bg-[#f7f2e9] px-2 py-0.5 rounded border border-[#ded6c8]">
           {findingsCount} {findingsCount === 1 ? 'finding' : 'findings'}
         </div>
       </div>
 
       {/* Action Subtext */}
       {status?.last_action && (
-        <div className="text-[11px] text-slate-300/80 line-clamp-2 bg-slate-950/50 p-1.5 rounded border border-slate-800/50 italic">
+        <div className="text-[11px] text-[#625d54] line-clamp-2 bg-[#f7f2e9] p-1.5 rounded border border-[#e6ded1] italic">
           "{status.last_action}"
         </div>
       )}

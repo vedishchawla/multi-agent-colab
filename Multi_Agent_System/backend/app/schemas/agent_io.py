@@ -15,6 +15,7 @@ class GoalDecompositionOutput(BaseModel):
     problem_statement_clarified: str = Field(description="Crisp reframing of the user's primary decision problem")
     decomposed_workstreams: List[Workstream] = Field(description="2-4 interdependent specialist workstreams")
     activated_specialists: List[SpecialistProfile] = Field(
+        default_factory=list,
         description="List of specialist agents activated for this specific goal"
     )
     extracted_implicit_constraints: List[Constraint] = Field(
@@ -36,7 +37,7 @@ class SpecialistFindingOutput(BaseModel):
         description="Specific underlying assumptions made by this specialist"
     )
     confidence: float = Field(ge=0.0, le=1.0, default=0.85, description="Confidence score")
-    evidence_summary: str = Field(description="Detailed rationale and supporting domain logic")
+    evidence_summary: str = Field(default="", description="Detailed rationale and supporting domain logic")
     dependencies_on_peers: List[str] = Field(
         default_factory=list,
         description="Notes on peer findings this analysis relies upon"

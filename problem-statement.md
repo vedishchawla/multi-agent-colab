@@ -120,4 +120,3 @@ Advanced Features
 7. Pluggable Specialist Roster Show the same coordination core running with a different set of specialists for a different goal type (e.g. swap in a technical-feasibility agent for a different domain) — demonstrates the coordination layer generalizes beyond one fixed team.
 
 https://lablab.ai/ai-hackathons/ai-agents-ai-week-hackathon
-

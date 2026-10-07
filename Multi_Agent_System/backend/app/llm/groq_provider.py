@@ -20,9 +20,11 @@ logger = logging.getLogger("collaborai.llm.groq")
 T = TypeVar("T", bound=BaseModel)
 
 GROQ_FALLBACK_MODELS = [
+    "openai/gpt-oss-120b",
+    "openai/gpt-oss-20b",
+    "qwen/qwen3.8-27b",
     "llama-3.3-70b-versatile",
     "llama-3.1-8b-instant",
-    "gemma2-9b-it",
 ]
 
 
@@ -61,9 +63,7 @@ class GroqProvider(BaseLLMProvider):
     def _build_json_schema_prompt(self, response_model: Type[T]) -> str:
         """Generate a JSON schema instruction block from a Pydantic model."""
         schema = response_model.model_json_schema()
-        # Remove metadata keys that confuse LLMs
-        for key in ("title", "description", "$defs"):
-            schema.pop(key, None)
+        schema.pop("title", None)
         return json.dumps(schema, indent=2)
 
     async def generate_structured(
@@ -87,54 +87,46 @@ class GroqProvider(BaseLLMProvider):
 
         last_error = None
         for model_name in models_to_try:
-            for attempt in range(3):
-                try:
-                    resp = await self.client.chat.completions.create(
+            try:
+                resp = await asyncio.wait_for(
+                    self.client.chat.completions.create(
                         model=model_name,
                         messages=[
                             {"role": "system", "content": system_msg},
                             {"role": "user", "content": prompt},
                         ],
                         temperature=temperature,
-                        max_tokens=4096,
+                        max_tokens=600,
                         response_format={"type": "json_object"},
-                    )
-                    raw_text = resp.choices[0].message.content or "{}"
-                    json_text = self._extract_json_block(raw_text)
-                    return response_model.model_validate_json(json_text)
+                    ),
+                    timeout=8.0
+                )
+                raw_text = resp.choices[0].message.content or "{}"
+                json_text = self._extract_json_block(raw_text)
+                return response_model.model_validate_json(json_text)
 
-                except Exception as e:
-                    last_error = e
-                    error_msg = str(e).lower()
+            except Exception as e:
+                last_error = e
+                error_msg = str(e).lower()
 
-                    # Model not found -> try next model
-                    if "model_not_found" in error_msg or "not found" in error_msg:
-                        logger.warning("Groq model %s not available, trying next.", model_name)
-                        break
+                # Model not available or rate-limited -> move immediately to next or fallback
+                if "model_not_found" in error_msg or "not found" in error_msg:
+                    logger.warning("Groq model %s not available, trying next.", model_name)
+                    continue
 
-                    # Rate limit -> backoff and retry
-                    if "rate_limit" in error_msg or "429" in error_msg:
-                        backoff = (2 ** attempt) + 0.5
-                        logger.warning(
-                            "Groq rate limited (attempt %d/3, model: %s). Retrying in %.1fs.",
-                            attempt + 1, model_name, backoff
-                        )
-                        await asyncio.sleep(backoff)
-                        continue
+                if "rate_limit" in error_msg or "429" in error_msg or "tokens per minute" in error_msg:
+                    logger.warning("Groq rate limit on %s. Trying next model immediately.", model_name)
+                    continue
 
-                    # JSON parse error -> retry with same model
-                    if "validation" in error_msg or "json" in error_msg:
-                        logger.warning(
-                            "Groq JSON parse error (attempt %d/3): %s", attempt + 1, str(e)[:120]
-                        )
-                        continue
+                if "validation" in error_msg or "json" in error_msg or "failed to validate" in error_msg:
+                    logger.warning("Groq JSON parse error on %s: %s", model_name, str(e)[:100])
+                    continue
 
-                    logger.error("Groq API error: %s", e)
-                    break
+                logger.error("Groq API error on %s: %s", model_name, e)
 
-        # All retries exhausted — fall back to mock
+        # Seamless zero-latency fallback to mock if Groq rate limits are hit
         logger.warning(
-            "Groq API exhausted all retries (%s). Falling back to simulation.", last_error
+            "Groq API exceeded limits (%s). Gracefully falling back to simulation for this step.", last_error
         )
         return await self.mock_fallback.generate_structured(
             prompt=prompt,
