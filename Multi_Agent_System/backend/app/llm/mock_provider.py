@@ -23,7 +23,9 @@ from ..schemas.agent_io import (
     SynthesisOutput,
     DetectedConflictItem,
     RevisedFindingItem,
-    ClaimAttributionItem
+    ClaimAttributionItem,
+    RoadmapPhase,
+    RiskMitigationItem
 )
 from ..schemas.state import (
     Workstream,
@@ -458,67 +460,100 @@ class MockLLMProvider(BaseLLMProvider):
                 ]
             )
 
+        # Robotics & Autonomous Systems domain
+        if any(w in p_lower for w in ["robot", "autonomous", "humanoid", "delivery"]):
+            return SynthesisOutput(
+                executive_summary="CollaborAI multi-agent deliberation concluded that autonomous humanoid delivery robot deployment is conditionally viable via a dual-track phased rollout. Track 1 provisions safety-critical validation and pilot operations by Week 6, while Track 2 fulfills complete multi-center scaling by Week 12, satisfying regulatory mandates while mitigating budget overruns.",
+                strategic_verdict="GO_WITH_CONDITIONS",
+                phased_roadmap=[
+                    RoadmapPhase(
+                        phase="Phase 1: Safety Certification & Pilot Site Retrofit",
+                        duration="Weeks 1 - 6",
+                        actions=["File OSHA shared-workspace safety dossier", "Configure perimeter geofencing & fail-safes", "Cap initial pilot tooling spend"],
+                        owner="Regulatory & Robotics Engineering"
+                    ),
+                    RoadmapPhase(
+                        phase="Phase 2: Supervised Pilot & Teleoperation Baseline",
+                        duration="Weeks 7 - 9",
+                        actions=["Deploy minimal viable platform in controlled depot", "Validate mean time between interventions", "Underwrite commercial liability coverage"],
+                        owner="Operations & Risk Management"
+                    ),
+                    RoadmapPhase(
+                        phase="Phase 3: Full Autonomous Multi-Center Cutover",
+                        duration="Weeks 10 - 12",
+                        actions=["Complete OSHA final audit clearance", "Scale fleet across primary urban centers", "Transition to full autonomous runtime"],
+                        owner="All Workstreams"
+                    )
+                ],
+                risk_mitigation_plan=[
+                    RiskMitigationItem(
+                        risk="OSHA workspace certification delays",
+                        severity="High",
+                        mitigation="Deploy provisional human-in-the-loop teleoperation oversight to maintain compliance status.",
+                        monitoring="Weekly regulatory review meetings with safety inspectors."
+                    ),
+                    RiskMitigationItem(
+                        risk="Hardware lease and retrofit budget overages exceeding $1.2M cap",
+                        severity="Medium",
+                        mitigation="Stage hardware procurement in batches aligned with verified depot milestones.",
+                        monitoring="Real-time CAPEX burn tracking against weekly budget baselines."
+                    )
+                ],
+                attributed_claims=[
+                    ClaimAttributionItem(
+                        statement="Dual-track phased rollout allows provisional pilot operations at Week 6 while satisfying full 12-week regulatory review.",
+                        contributing_agents=["RegulatoryComplianceSpecialistAgent", "RoboticsSystemsArchitectAgent"],
+                        rationale="Reconciles regulatory certification lead time with engineering deployment constraints.",
+                        confidence=0.92
+                    ),
+                    ClaimAttributionItem(
+                        statement="Controlled depot pilot with teleoperation oversight eliminates catastrophic liability exposure.",
+                        contributing_agents=["Risk&InsuranceAnalystAgent"],
+                        rationale="Satisfies insurer prerequisites for provisional underwriting.",
+                        confidence=0.88
+                    )
+                ]
+            )
+
+        # Dynamic fallback for general goals
+        topic = prompt.splitlines()[0][:80].replace("GOAL:", "").strip() if "GOAL:" in prompt else "strategic initiative"
         return SynthesisOutput(
-            executive_summary="CollaborAI multi-agent deliberation concluded with a clear conditional green light. By reconciling market timing urgency with mandatory 10-week regulatory certification through a phased dual-track rollout, the organization protects first-mover demand while guaranteeing zero regulatory penalties and maintaining a 26% operating margin.",
+            executive_summary=f"CollaborAI multi-agent deliberation concluded that proceeding with {topic} is conditionally viable with disciplined risk controls and phased milestone gating.",
             strategic_verdict="GO_WITH_CONDITIONS",
             phased_roadmap=[
-                {
-                    "phase": "Phase 1: Compliance Fast-Track & Filing",
-                    "duration": "Weeks 1 - 4",
-                    "actions": ["Submit formal certification dossier", "Engage local regulatory counsel", "Lock BOM tariffs"],
-                    "owner": "Regulatory & Financial Agents"
-                },
-                {
-                    "phase": "Phase 2: Digital Soft-Launch & Waitlist",
-                    "duration": "Weeks 5 - 9",
-                    "actions": ["Launch VIP waitlist and influencer previews", "Benchmark competitor pricing", "Pre-qualify B2B buyers"],
-                    "owner": "Market & Competitive Agents"
-                },
-                {
-                    "phase": "Phase 3: Formal Commercial GA Launch",
-                    "duration": "Weeks 10 - 12",
-                    "actions": ["Finalize certificate clearance", "Begin customs dispatch", "Scale national advertising"],
-                    "owner": "All Workstreams"
-                }
+                RoadmapPhase(
+                    phase="Phase 1: Foundational Compliance & Baseline Gating",
+                    duration="Weeks 1 - 4",
+                    actions=["Execute compliance and governance audits", "Establish SLA baselines", "Lock resource allocations"],
+                    owner="Governance & Planning"
+                ),
+                RoadmapPhase(
+                    phase="Phase 2: Provisional Deployment & Pilot Operations",
+                    duration="Weeks 5 - 8",
+                    actions=["Roll out provisional operations", "Monitor core risk metrics", "Iterate on feedback"],
+                    owner="Specialist Teams"
+                ),
+                RoadmapPhase(
+                    phase="Phase 3: Full General Availability & Operational Scaling",
+                    duration="Weeks 9 - 12",
+                    actions=["Scale across target environments", "Continuous assurance reviews", "Transition to steady-state"],
+                    owner="Executive Steering Committee"
+                )
             ],
             risk_mitigation_plan=[
-                {
-                    "risk": "Regulatory backlog extending past 10 weeks",
-                    "severity": "Medium",
-                    "mitigation": "Retain secondary accredited testing lab on standby with $8k contingency retainer.",
-                    "monitoring": "Weekly audit status check with ministry liaison."
-                },
-                {
-                    "risk": "Competitor counter-campaign during waitlist window",
-                    "severity": "Low",
-                    "mitigation": "Offer early-adopter price guarantee and exclusive local localized bundle.",
-                    "monitoring": "Daily competitor ad spend scraping."
-                }
+                RiskMitigationItem(
+                    risk="Execution delays due to cross-functional dependencies",
+                    severity="Medium",
+                    mitigation="Implement milestone checkpoint reviews with automated drift detection.",
+                    monitoring="Weekly deliberation audits."
+                )
             ],
             attributed_claims=[
                 ClaimAttributionItem(
-                    statement="Mandatory statutory certification lead time is established at 10 weeks, prohibiting premature physical rollout before week 10.",
-                    contributing_agents=["RegulatoryComplianceAgent"],
-                    rationale="Derived from statutory testing mandates identified in FND-REG-001.",
-                    confidence=0.96
-                ),
-                ClaimAttributionItem(
-                    statement="Consumer demand remains highly receptive, warranting pre-launch waitlist activities in Week 6.",
-                    contributing_agents=["MarketResearchAgent"],
-                    rationale="Supported by 74% consumer purchase intent index in FND-MKT-001.",
-                    confidence=0.88
-                ),
-                ClaimAttributionItem(
-                    statement="Phased dual-track rollout eliminates compliance penalty risks while capturing 85% of early market demand.",
-                    contributing_agents=["MarketResearchAgent", "RegulatoryComplianceAgent", "Negotiation Moderator"],
-                    rationale="Direct result of Round 1 negotiation concession compromise DEC-NEG-001.",
-                    confidence=0.93
-                ),
-                ClaimAttributionItem(
-                    statement="Gross margin remains resilient at 26%, safely within financial feasibility thresholds.",
-                    contributing_agents=["FinancialModelingAgent"],
-                    rationale="Financial sensitivity analysis in FND-FIN-001 confirms viable ROI under a 4-week marketing shift.",
-                    confidence=0.89
+                    statement=f"Phased rollout structure ensures high-confidence execution for {topic}.",
+                    contributing_agents=["StrategicAnalysisAgent", "GovernanceComplianceAgent"],
+                    rationale="Derived from multi-agent risk modeling.",
+                    confidence=0.91
                 )
             ]
         )

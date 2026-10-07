@@ -21,8 +21,8 @@ T = TypeVar("T", bound=BaseModel)
 
 GROQ_FALLBACK_MODELS = [
     "openai/gpt-oss-120b",
-    "openai/gpt-oss-20b",
     "qwen/qwen3.8-27b",
+    "openai/gpt-oss-20b",
     "llama-3.3-70b-versatile",
     "llama-3.1-8b-instant",
 ]
@@ -81,6 +81,11 @@ class GroqProvider(BaseLLMProvider):
             f"Respond ONLY with the JSON object. No markdown, no explanation."
         )
 
+        # Synthesis outputs require more token headroom for roadmaps and claims
+        is_synthesis = response_model.__name__ == "SynthesisOutput"
+        token_limit = 1400 if is_synthesis else 700
+        call_timeout = 15.0 if is_synthesis else 10.0
+
         models_to_try = [self.primary_model] + [
             m for m in GROQ_FALLBACK_MODELS if m != self.primary_model
         ]
@@ -96,10 +101,10 @@ class GroqProvider(BaseLLMProvider):
                             {"role": "user", "content": prompt},
                         ],
                         temperature=temperature,
-                        max_tokens=600,
+                        max_tokens=token_limit,
                         response_format={"type": "json_object"},
                     ),
-                    timeout=8.0
+                    timeout=call_timeout
                 )
                 raw_text = resp.choices[0].message.content or "{}"
                 json_text = self._extract_json_block(raw_text)

@@ -130,35 +130,39 @@ class GoalConsistencyOutput(BaseModel):
 class ClaimAttributionItem(BaseModel):
     """Attribution item mapping a synthesized recommendation statement to source agents."""
     statement: str = Field(description="The recommendation claim or milestone")
-    contributing_agents: List[str] = Field(description="Agents who provided the basis for this")
-    rationale: str = Field(description="How source findings support this claim")
+    contributing_agents: List[str] = Field(default_factory=list, description="Agents who provided the basis for this")
+    rationale: str = Field(default="", description="How source findings support this claim")
     confidence: float = Field(default=0.9)
 
 
 class RoadmapPhase(BaseModel):
     phase: str
-    duration: str
-    actions: List[str]
-    owner: str
+    duration: str = "TBD"
+    actions: List[str] = Field(default_factory=list)
+    owner: str = "Cross-functional"
 
 
 class RiskMitigationItem(BaseModel):
     risk: str
-    severity: str
-    mitigation: str
-    monitoring: str
+    severity: str = "Medium"
+    mitigation: str = ""
+    monitoring: str = ""
 
 
 class SynthesisOutput(BaseModel):
     """Structured final recommendation produced by the Synthesis Agent."""
     executive_summary: str = Field(description="Executive narrative summarizing the collective decision")
-    strategic_verdict: Literal["GO", "GO_WITH_CONDITIONS", "DEFER", "NO_GO", "ALTERNATIVE_SELECTED"]
+    strategic_verdict: Literal["GO", "GO_WITH_CONDITIONS", "DEFER", "NO_GO", "ALTERNATIVE_SELECTED"] = "GO_WITH_CONDITIONS"
     phased_roadmap: List[RoadmapPhase] = Field(
+        default_factory=list,
         description="Structured chronological phases (phase, timeline, actions, owner)"
     )
     risk_mitigation_plan: List[RiskMitigationItem] = Field(
+        default_factory=list,
         description="Mitigation matrix (risk, severity, countermeasure, monitoring)"
     )
     attributed_claims: List[ClaimAttributionItem] = Field(
+        default_factory=list,
         description="Granular claim-level attributions back to specialists"
     )
+
