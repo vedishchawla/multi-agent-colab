@@ -28,11 +28,12 @@ async def test_scenarios_endpoint():
         resp = await client.get("/api/scenarios")
         assert resp.status_code == 200
         scenarios = resp.json()
-        assert len(scenarios) == 3
+        assert len(scenarios) >= 3
         ids = [s["scenario_id"] for s in scenarios]
         assert "brazil_product_launch" in ids
         assert "drone_medical_delivery" in ids
         assert "fintech_ai_compliance" in ids
+        assert "deadlock_escalation_demo" in ids
 
 
 @pytest.mark.asyncio

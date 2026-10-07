@@ -371,7 +371,8 @@ OFFERS:
 {[p.model_dump() for p in round_record.proposals]}
 
 Can these concessions be synthesized into a mutually viable compromise (e.g. phased rollout, soft launch, dual-track staging)?
-If yes, provide the compromise statement and updated finding claims.
+CRITICAL RULE: If the tension involves strictly irreconcilable HARD constraints (e.g. statutory moratoriums, non-negotiable legal liability, or strict zero-compromise mandates where no concession is legally or operationally viable), you MUST set compromise_achieved to false and summarize why executive human escalation is required.
+Otherwise, set compromise_achieved to true and provide the synthesized compromise statement and revised findings.
 """
             mod_output: NegotiationModerationOutput = await self.llm.generate_structured(
                 prompt=moderation_prompt,
@@ -414,9 +415,8 @@ If yes, provide the compromise statement and updated finding claims.
                     event_callback(resolved_event)
             else:
                 # Deadlock reached -> Escalate to human
-                if round_number >= state.max_negotiation_rounds:
-                    conflict.status = "escalated"
-                    await self._trigger_human_escalation(state, conflict, event_callback)
+                conflict.status = "escalated"
+                await self._trigger_human_escalation(state, conflict, event_callback)
 
         return state
 

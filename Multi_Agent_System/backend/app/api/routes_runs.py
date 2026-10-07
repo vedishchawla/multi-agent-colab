@@ -41,8 +41,28 @@ async def create_run(req: RunCreateRequest):
     if not goal.strip():
         raise HTTPException(status_code=400, detail="A decision goal must be provided.")
 
+    # Guardrail: Adversarial Prompt Injection Defense
+    from ..guardrails.injection_defense import validate_and_sanitize_prompt
+    injection_audit = validate_and_sanitize_prompt(goal)
+    if not injection_audit.is_safe:
+        raise HTTPException(
+            status_code=422,
+            detail=injection_audit.rejection_reason
+        )
+    sanitized_goal = injection_audit.sanitized_text
+
+    # Also audit custom user constraints
+    for c in constraints:
+        c_audit = validate_and_sanitize_prompt(c.description)
+        if not c_audit.is_safe:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Malicious constraint detected ({c.category}): {c_audit.rejection_reason}"
+            )
+        c.description = c_audit.sanitized_text
+
     state = await orchestrator.create_and_start_run(
-        goal=goal,
+        goal=sanitized_goal,
         constraints=constraints,
         simulation_mode=req.simulation_mode
     )

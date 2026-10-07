@@ -111,6 +111,41 @@ DEMO_SCENARIOS: List[ScenarioPreset] = [
             "FinancialModelingAgent",
             "TechnicalArchitectureAgent"
         ]
+    ),
+    ScenarioPreset(
+        scenario_id="deadlock_escalation_demo",
+        title="High-Stakes Deadlock & Human Escalation Demo",
+        category="Crisis Governance & Human Escalation",
+        description="Demonstrates multi-agent deadlock when emergency ICU surgical AI deployment collides with a zero-derogation statutory moratorium, pausing execution for executive human intervention.",
+        default_goal="Should we deploy uncertified experimental AI diagnostic models to emergency ICUs during an active statutory moratorium?",
+        default_constraints=[
+            Constraint(
+                constraint_id="CST-01",
+                category="compliance",
+                description="Statutory non-derogable moratorium: Zero deployment allowed before multi-center trial clearance (Strict Criminal Liability)",
+                is_hard_constraint=True
+            ),
+            Constraint(
+                constraint_id="CST-02",
+                category="timeline",
+                description="Emergency clinical mandate: Deploy within 48 hours to manage critical ICU overflow",
+                is_hard_constraint=True,
+                threshold_value="48 hours"
+            ),
+            Constraint(
+                constraint_id="CST-03",
+                category="budget",
+                description="Zero additional capital expenditure allocated for emergency insurance indemnification",
+                is_hard_constraint=True,
+                threshold_value="$0"
+            )
+        ],
+        suggested_specialists=[
+            "ClinicalSafetySpecialistAgent",
+            "StatutoryComplianceSpecialistAgent",
+            "HospitalOperationsAgent",
+            "RiskLiabilitySpecialistAgent"
+        ]
     )
 ]
 
