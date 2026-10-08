@@ -1,49 +1,107 @@
-# Python
+# ==============================================================================
+# Git Ignore Configuration for CollaborAI (Multi-Agent Decision Intelligence)
+# ==============================================================================
+
+# Environment variables & secrets (CRITICAL)
+.env
+.env.*
+!.env.example
+*.env
+
+# Python compilation & caches
 __pycache__/
 *.py[cod]
-*.egg-info/
-dist/
+*$py.class
+*.so
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
 .eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
 *.egg
+MANIFEST
 
 # Virtual environments
 venv/
 .venv/
 env/
+ENV/
+env.bak/
+venv.bak/
 
-# Environment variables
-.env
+# Testing & code coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+nosetests.xml
+coverage.xml
 
-# Database
+# Databases & local storage
 *.db
+*.sqlite
 *.sqlite3
+collaborai.db
 
-# IDE
-.idea/
+# Node.js & Frontend dependencies
+node_modules/
+*/node_modules/
+frontend/node_modules/
+sparkle-agents/node_modules/
+
+# Frontend builds
+dist/
+*/dist/
+frontend/dist/
+sparkle-agents/dist/
+.vite/
+*/.vite/
+.output/
+
+# Logs & Debugging
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun.lockb.bak
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and editors
 .vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Node
-node_modules/
-frontend/node_modules/
-
-# Frontend build
-frontend/dist/
-
-# Logs
-*.log
-
-# Pytest
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Antigravity IDE
+# Antigravity & AI Assistant metadata
 .gemini/
+.agents/
+.lovable/
+*/.lovable/

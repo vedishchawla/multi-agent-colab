@@ -1,0 +1,1 @@
+"""CollaborAI Backend Application Package."""
